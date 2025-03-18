@@ -1,12 +1,14 @@
 import React from "react";
 import { useCart } from "../contexts/CartProvider";
+import { toast } from "react-toastify";
+ 
 function Product({ id, title, img, price }) {
   const { addItemToCart, cart } = useCart();
   function handleAdd() {
     console.log("Handle add called!");
     for (const item of cart) {
       if (item.id === id) {
-        alert("Item already added to cart!");
+        toast.error("Item already added to cart!");
         return;
       }
     }
@@ -18,7 +20,7 @@ function Product({ id, title, img, price }) {
       quantity: 1,
     };
     addItemToCart(newCartItem);
-    alert("Item added");
+    toast.info("Item added");
   }
   return (
     <div
