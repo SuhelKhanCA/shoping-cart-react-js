@@ -1,12 +1,12 @@
-import React from 'react'
-import { useCart } from '../contexts/CartProvider';
+import React from "react";
+import { useCart } from "../contexts/CartProvider";
 function Product({ id, title, img, price }) {
   const { addItemToCart, cart } = useCart();
   function handleAdd() {
     console.log("Handle add called!");
     for (const item of cart) {
       if (item.id === id) {
-        alert("Item already added to cart!")
+        alert("Item already added to cart!");
         return;
       }
     }
@@ -16,24 +16,50 @@ function Product({ id, title, img, price }) {
       title: title,
       img: img,
       quantity: 1,
-    }
+    };
     addItemToCart(newCartItem);
     alert("Item added");
   }
   return (
-    <div style={{
-        margin: "1rem",
+    <div
+      style={{
         padding: "1rem",
-        border: "2px solid #343434",
-      }}>
-          <p>id : {id}</p>
-          <p>title : {title}</p>
-          <p>title : {title}</p>
-          <img src={img} alt={title} height={200} />
-      <p>price : {price}</p>
-      <button onClick={handleAdd}>Add to Cart</button>
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        textAlign: "center",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+      }}
+    >
+      <img
+        src={img}
+        alt={title}
+        style={{
+          width: "100%",
+          height: "200px",
+          objectFit: "cover",
+          borderRadius: "4px",
+          marginBottom: "1rem",
+        }}
+      />
+      <h3 style={{ marginBottom: "0.5rem" }}>{title}</h3>
+      <p style={{ color: "#666", marginBottom: "1rem" }}>Price: ${price}</p>
+      <button
+        style={{
+          backgroundColor: "#3879a5",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          padding: "0.5rem 1rem",
+          width: "100%",
+          fontWeight: "500",
+          transition: "background-color 0.2s",
+        }}
+        onClick={handleAdd}
+      >
+        Add to Cart
+      </button>
     </div>
-  )
+  );
 }
 
 export default Product;

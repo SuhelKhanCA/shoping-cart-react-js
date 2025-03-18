@@ -1,27 +1,40 @@
-import React from 'react'
-import { useCart } from '../contexts/CartProvider';
-import CartItem from './CartItem';
+import React from "react";
+import { useCart } from "../contexts/CartProvider";
+import CartItem from "./CartItem";
 function Cart() {
   const { cart } = useCart();
-  if (cart.length === 0) return <h1>No items in the Cart!</h1>;
+  if (cart.length === 0) {
+    return (
+      <h1 style={{ textAlign: "center", padding: "2rem" }}>
+        No items in the Cart!
+      </h1>
+    );
+  }
 
-  // let totalAmount = 0;
-  // for (const item of cart) {
-  //   totalAmount += item.price * item.quantity;
-  // }
-  const totalAmount = cart.reduce((totalAmount, item) => { 
+  const totalAmount = cart.reduce((totalAmount, item) => {
     return totalAmount + item.price * item.quantity;
-  }, 0)
+  }, 0);
+
   return (
-    <>
-      {cart.map((cartItem) => {
-        return (
+    <div style={{ padding: "1rem" }}>
+      <h2 style={{ marginBottom: "1rem" }}>Your Cart</h2>
+      <div style={{ marginBottom: "1rem" }}>
+        {cart.map((cartItem) => (
           <CartItem key={cartItem.id} {...cartItem} />
-        );
-      })}
-      <h1>Total amount : {totalAmount}</h1>
-    </>
-  )
+        ))}
+      </div>
+      <div
+        style={{
+          borderTop: "2px solid #ddd",
+          padding: "1rem",
+          textAlign: "right",
+          fontWeight: "bold",
+        }}
+      >
+        Total Amount: ${totalAmount}
+      </div>
+    </div>
+  );
 }
 
 export default Cart;
