@@ -1,0 +1,67 @@
+name: React Shopping Cart CI/CD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 19.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "./shopping-cart/package-lock.json"
+
+      - name: Install Dependencies
+        run: |
+          cd shopping-cart
+          npm ci
+
+      - name: Build Project
+        run: |
+          cd shopping-cart
+          npm run build
+
+      - name: Run Linting
+        run: |
+          cd shopping-cart
+          npm run lint
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: shopping-cart/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-files
+          path: shopping-cart/dist
+
+      # Add your deployment steps here
+      # Example for GitHub Pages:
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./shopping-cart/dist
